@@ -1,3 +1,5 @@
 .env
 node_modules
 dist
+.venv
+py_src/.env
