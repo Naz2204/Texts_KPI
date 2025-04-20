@@ -10,6 +10,10 @@ const topicSchema = new mongoose.Schema(
     parent: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'topics'
+    },
+    isRoot: {
+      type: Boolean,
+      default: false
     }
   },
   { timestamps: true }
@@ -25,6 +29,8 @@ topicSchema.pre('save', async function (next) {
     const topicParent = await mongoose.models.Topic.findById(this.parent);
     if (!topicParent)
       return next(new Error(`Topic with id ${this.parent} does not exist`));
+  } else {
+    this.isRoot = true;
   }
 
   next();
