@@ -1,6 +1,9 @@
-from text_preparation import text_preparation
+from .text_preparation import text_preparation
 import numpy as np
 import joblib
+from pathlib import Path
+
+_model_file_path = Path(__file__).parent.parent / 'models' / 'clusterize_and_autotag.joblib'
 
 def cluster_documents_and_generate_tags_lda(documents: list[str], num_clusters: int = 5, num_tags_per_cluster: int = 4):
     from sklearn.feature_extraction.text import TfidfVectorizer
@@ -33,7 +36,7 @@ def cluster_documents_and_generate_tags_lda(documents: list[str], num_clusters: 
         "num_tags_per_cluster": num_tags_per_cluster
     }
     try:
-        joblib.dump(results_to_save, "../models/clusterize_and_autotag.joblib")
+        joblib.dump(results_to_save, _model_file_path)
         print(f"Trained clusterizer was successfully written to file clusterize_and_autotag.joblib")
     except Exception as e:
         print(f"Error while saving a clusterizer: {e}")
@@ -41,12 +44,12 @@ def cluster_documents_and_generate_tags_lda(documents: list[str], num_clusters: 
     return cluster_tags, doc_clusters
 
 
-def assign_new_document_lda(text: str):
+def assign_new_document_lda(text: str) -> tuple[int, list[str]]:
 
     prepared_new_doc = text_preparation(text)
 
     try:
-        model = joblib.load("../models/clusterize_and_autotag.joblib")
+        model = joblib.load(_model_file_path)
         print("LDA model was successfully loaded")
     except Exception as e:
         print(f"Unable to load LDA model {e}")
@@ -61,5 +64,5 @@ def assign_new_document_lda(text: str):
 
     assigned_tags = model["cluster_tags"].get(predicted_cluster, ["Unknown tags"])
 
-    return predicted_cluster, assigned_tags
+    return int(predicted_cluster), assigned_tags
 
