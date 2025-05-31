@@ -34,6 +34,8 @@ def load_document(db):
         },
         "createdAt": datetime.now(UTC),
         "updatedAt": datetime.now(UTC),
+        "tags": ["Grim"],
+        "rating": 7,
         "__v": 0
     }
 
@@ -48,8 +50,7 @@ def load_tags(db, data):
         tags.append({
             "name": i,
             "createdAt": datetime.now(UTC),
-            "updatedAt": datetime.now(UTC),
-            "__v": 0
+            "updatedAt": datetime.now(UTC)
         })
 
     db.insert_many(tags)
@@ -64,16 +65,21 @@ def load_topics(db, topics):
                 "parent": ids[i[1]],
                 "createdAt": datetime.now(UTC),
                 "updatedAt": datetime.now(UTC),
+                "isRoot": False,
                 "__v": 0
             }
+            print(data)
         else:
             data = {
                 "name": i[0],
                 "createdAt": datetime.now(UTC),
                 "updatedAt": datetime.now(UTC),
+                "isRoot": True,
                 "__v": 0
             }
-        ids.append(db.insert_one(data).inserted_id)
+
+        x = db.insert_one(data).inserted_id
+        ids.append(x)
 
 def main():
     load_dotenv()
@@ -81,13 +87,13 @@ def main():
     db_client = pm.MongoClient(os.getenv("DB_ADDRESS"))
     db = db_client["Texts"]
 
-    load_document(db)
+    #load_document(db)
 
-    load_tags(db, ["Fantasy", "Fiction", "SomeTag"])
+    #load_tags(db, ["Grim", "Data", "Trash"])
 
     data = [
-        ["Andersen fairytales"],
-        ["The rad hat", 0]
+        ["Test parent topic4"],
+        ["2", 0]
     ]
     load_topics(db, data)
 

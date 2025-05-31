@@ -1,0 +1,10 @@
+fastapi[standard]
+granian[reload]
+pypdf
+python-dotenv
+python-docx
+python-multipart
+pymongo
+nltk
+scikit-learn
+gensim
