@@ -1,9 +1,7 @@
-version: "1"
-
 services:
   api:
-    build: .
+    build: ./py_src
     ports:
       - 8000:8000
     volumes:
-      - .:/app
+      - ./py_src:/app
