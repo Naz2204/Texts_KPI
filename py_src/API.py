@@ -1,8 +1,22 @@
-from fastapi import FastAPI, UploadFile, HTTPException, Body
+from fastapi import FastAPI, UploadFile, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from functions import Functions
 from my_utils.document_structure import RequestBody
+
 app = FastAPI()
 functions = Functions()
+
+origins = [
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get('/')
 async def get_tags():
