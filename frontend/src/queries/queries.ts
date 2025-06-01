@@ -43,3 +43,32 @@ export const getTagsQuery = async () => {
   const { data } = await axios.get<{ name: string }[]>(baseUrl);
   return data.map((tag) => ({ value: tag.name, label: tag.name }));
 };
+
+export const downloadFileMutation = async (id: string) => {
+  try {
+    const response = await axios.post(
+      `${baseUrl}/download/${id}`
+      //   {
+      //   responseType: 'blob'
+      // }
+    );
+    console.log(response.headers);
+
+    const format = response.headers['content-type'].split('/')[1];
+    console.log(format);
+
+    const filename = `file.${format}`;
+
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Download failed:', error);
+    alert('Failed to download file.');
+  }
+};
