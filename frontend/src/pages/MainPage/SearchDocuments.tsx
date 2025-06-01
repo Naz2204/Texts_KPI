@@ -31,8 +31,8 @@ export default function SearchDocuments() {
   };
 
   return (
-    <div>
-      <div>
+    <div id="search-bar">
+      <div id="class-filter">
         <label>Select class</label>
         <Select
           defaultValue={doc_class}
@@ -41,9 +41,10 @@ export default function SearchDocuments() {
         />
       </div>
       {!areTagsFetching && (
-        <div>
+        <div id="tag-filter">
           <label>Select tags</label>
           <Select
+            className=''
             defaultValue={tags}
             isMulti
             options={availableTags}
@@ -51,9 +52,9 @@ export default function SearchDocuments() {
           />
         </div>
       )}
-      <div>
+      <div id="keyword-filter">
         <label>Enter keywords</label>
-        <textarea onChange={(e) => setKeywords(e.target.value)} />
+        <textarea rows={1} onChange={(e) => setKeywords(e.target.value)} />
       </div>
 
       <button disabled={isSearching} onClick={handleSearch}>
