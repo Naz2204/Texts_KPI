@@ -96,6 +96,17 @@ class DbConnector:
 
             document.pop("metadata", None)
 
+            db_collection = self._db["clusters"]
+
+            tags = await db_collection.find_one({"cluster_id": document["cluster_id"]}, {"tags":1})
+
+            if tags:
+                document["tags"] = tags["tags"]
+            else:
+                document["tags"] = []
+
+            document.pop("cluster_id", None)
+
         return document
 
     async def get_document_by_complex_filter(self, tags: list[str]|None, keywords: list[str]|None, doc_class: str|None) -> list[dict]:
