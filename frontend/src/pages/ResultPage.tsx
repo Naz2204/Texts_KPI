@@ -16,36 +16,34 @@ export default function ResultPage() {
 
   return (
     <div className='document-viewer-container'>
-      <div>
-        <label>Document name: </label>
-        <span>{document.name}</span>
+      <h1><span>{document.name}</span></h1>
+      <div className='metadata-block'>
+        <div className='info-block'>
+          <label>Document class: </label>
+          <span>{document.class}</span>
+        </div>
+        <div className='info-block'>
+          <label>Document tags: </label>
+          <span>{document.tags.join(', ')}</span>
+        </div>
+        <div className='info-block'>
+          <label>Document topics: </label>
+          <span>{document.topics.join(', ')}</span>
+        </div>
+        <div className='download-button-wrapper'>
+          <button disabled={isPending} onClick={handleDownloadFile}>
+            Download file
+          </button>
+        </div>
       </div>
-      <div>
-        <label>Document class: </label>
-        <span>{document.class}</span>
+      <div className='text-area-wrapper'>
+        <textarea
+          className='document-body-textarea'
+          value={document.body}
+          disabled
+
+        />
       </div>
-      <div>
-        <label>Document tags: </label>
-        <span>{document.tags.join(', ')}</span>
-      </div>
-      <div>
-        <label>Document topics: </label>
-        <span>{document.topics.join(', ')}</span>
-      </div>
-      <div>
-        <button disabled={isPending} onClick={handleDownloadFile}>
-          Download file
-        </button>
-      </div>
-      <textarea
-        style={{
-          width: '100%',
-          height: '100%',
-          resize: 'none'
-        }}
-        value={document.body}
-        disabled
-      />
     </div>
   );
 }
