@@ -138,3 +138,71 @@ li p {
   font-size: 0.875rem;
   margin: 0;
 }
+
+
+.document-viewer-container {
+  background-color: var(--page-background);
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+}
+
+.info-block {
+  background-color: #e0f2fe; /* Light blue background, similar to items in image 1 */
+  padding: 12px 18px;
+  margin-bottom: 12px; /* Space between info blocks */
+  border-radius: 6px; /* Rounded corners for info blocks */
+  display: flex; /* Align label and span nicely */
+  align-items: center;
+  border: 1px solid #cce7ff; /* Subtle border */
+}
+
+.info-block:last-of-type { /* No margin bottom for the last info-block before textarea */
+  margin-bottom: 0;
+}
+
+.info-block label {
+  font-weight: 600; /* Make labels bolder */
+  margin-right: 10px;
+  color: #0056b3; /* Darker blue for labels for contrast */
+  flex-shrink: 0; /* Prevent label from shrinking if content is long */
+}
+
+.info-block span {
+  color: #333;
+  word-break: break-word; /* Prevent long text from breaking layout */
+}
+
+/* Specific styling based on "Frame 2" idea if needed */
+.document-name-block {
+  /* Could have slightly larger padding or font if it's meant to be a title */
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.document-name-block span {
+  font-weight: bold; /* Make document name itself also bold */
+}
+
+
+.document-body-textarea {
+  flex-grow: 1; /* This makes the textarea take up the remaining vertical space */
+  border: 1px solid #b3d7f5; /* Border color matching the theme */
+  border-radius: 6px;
+  padding: 15px;
+  margin-top: 20px; /* Space above the textarea */
+  background-color: #f8fcff; /* Very light, almost white, background for textarea */
+  font-family: inherit; /* Use the same font as the rest of the page */
+  font-size: 1em;
+  color: #333;
+  /* width: 100%; and resize: none; are good from your inline styles */
+}
+
+.document-body-textarea:disabled {
+  background-color: #e9ecef; /* Standard disabled background color */
+  color: #6c757d; /* Standard disabled text color */
+  cursor: not-allowed;
+}

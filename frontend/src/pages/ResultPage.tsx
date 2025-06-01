@@ -5,7 +5,7 @@ export default function ResultPage() {
   const document = useLoaderData<IAnalyzedDocument>();
 
   return (
-    <div style={{ height: '90vh' }}>
+    <div className='document-viewer-container'>
       <div>
         <label>Document name: </label>
         <span>{document.name}</span>
