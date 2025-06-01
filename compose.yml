@@ -5,3 +5,7 @@ services:
       - 8000:8000
     volumes:
       - ./py_src:/app
+  frontend:
+    build: ./frontend
+    ports:
+      - 3000:5173
