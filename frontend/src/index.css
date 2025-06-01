@@ -1,3 +1,40 @@
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#root {
+  background-color: antiquewhite;
+  flex: 1;
+  padding: 0 3vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  height: 6vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+main {
+  flex: 1;
+  background-color: aqua;
+}
+
+#search-bar {
+  height: 8vh;
+  background-color: brown;
+  display: flex;
+  button {
+    background-color: blue;
+  }
 }

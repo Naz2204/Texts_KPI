@@ -12,6 +12,7 @@ import {
   type SetStateAction
 } from 'react';
 import { availableClasses } from '../../config/availableClasses';
+import '../../index.css'
 
 interface Params {
   setDocuments: Dispatch<SetStateAction<IDocument[]>>;
@@ -77,8 +78,8 @@ export default function SearchDocuments({ setDocuments }: Params) {
   };
 
   return (
-    <div>
-      <div>
+    <div id="search-bar">
+      <div id="class-filter">
         <label>Select class</label>
         <Select
           defaultValue={state.doc_class}
@@ -87,7 +88,7 @@ export default function SearchDocuments({ setDocuments }: Params) {
         />
       </div>
       {!areTagsFetching && (
-        <div>
+        <div id="tag-filter">
           <label>Select tags</label>
           <Select
             defaultValue={state.tags}
@@ -97,7 +98,7 @@ export default function SearchDocuments({ setDocuments }: Params) {
           />
         </div>
       )}
-      <div>
+      <div id="keyword-filter">
         <label>Enter keywords</label>
         <textarea onChange={handleSetKeywords} />
       </div>
