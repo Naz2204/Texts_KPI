@@ -1,80 +1,33 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import {
-  getTagsQuery,
-  searchDocumentsMutation,
-  type IDocument
-} from '../../queries/store';
-import Select, { type MultiValue, type SingleValue } from 'react-select';
-import {
-  useReducer,
-  type ChangeEventHandler,
-  type Dispatch,
-  type SetStateAction
-} from 'react';
+import { getTagsQuery, searchDocumentsMutation } from '../../queries/queries';
+import Select from 'react-select';
 import { availableClasses } from '../../config/availableClasses';
-import '../../index.css'
+import { useSearchStore } from '../../store/store';
 
-interface Params {
-  setDocuments: Dispatch<SetStateAction<IDocument[]>>;
-}
-
-type Option = { value: string; label: string };
-
-export type SearchState = {
-  tags: MultiValue<Option>;
-  doc_class: SingleValue<Option>;
-  keywords: string;
-};
-
-type Action =
-  | { type: 'SET_TAGS'; payload: MultiValue<Option> }
-  | { type: 'SET_CLASS'; payload: SingleValue<Option> }
-  | { type: 'SET_KEYWORDS'; payload: string };
-
-const initialState: SearchState = {
-  tags: [],
-  doc_class: availableClasses[0],
-  keywords: ''
-};
-
-function reducer(state: SearchState, action: Action): SearchState {
-  switch (action.type) {
-    case 'SET_TAGS':
-      return { ...state, tags: action.payload };
-    case 'SET_CLASS':
-      return { ...state, doc_class: action.payload };
-    case 'SET_KEYWORDS':
-      return { ...state, keywords: action.payload };
-    default:
-      return state;
-  }
-}
-
-export default function SearchDocuments({ setDocuments }: Params) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+export default function SearchDocuments() {
+  const {
+    tags,
+    doc_class,
+    keywords,
+    setTags,
+    setClass,
+    setKeywords,
+    setSearchResult
+  } = useSearchStore();
 
   const { mutateAsync: search, isPending: isSearching } = useMutation({
     mutationFn: searchDocumentsMutation
   });
 
-  const { data: tags, isFetching: areTagsFetching } = useQuery({
+  const { data: availableTags, isFetching: areTagsFetching } = useQuery({
     queryKey: ['tags'],
     queryFn: getTagsQuery,
     refetchOnWindowFocus: false
   });
 
-  const handleSelectClass = (newClass: SingleValue<Option>) =>
-    dispatch({ type: 'SET_CLASS', payload: newClass });
-
-  const handleSelectTags = (newTags: MultiValue<Option>) =>
-    dispatch({ type: 'SET_TAGS', payload: newTags });
-
-  const handleSetKeywords: ChangeEventHandler<HTMLTextAreaElement> = (e) =>
-    dispatch({ type: 'SET_KEYWORDS', payload: e.target.value });
-
   const handleSearch = async () => {
-    const documents = await search(state);
-    setDocuments(documents);
+    const documents = await search({ tags, doc_class, keywords });
+    setSearchResult(documents);
   };
 
   return (
@@ -82,25 +35,25 @@ export default function SearchDocuments({ setDocuments }: Params) {
       <div id="class-filter">
         <label>Select class</label>
         <Select
-          defaultValue={state.doc_class}
+          defaultValue={doc_class}
           options={availableClasses}
-          onChange={handleSelectClass}
+          onChange={(newClass) => setClass(newClass)}
         />
       </div>
       {!areTagsFetching && (
         <div id="tag-filter">
           <label>Select tags</label>
           <Select
-            defaultValue={state.tags}
+            defaultValue={tags}
             isMulti
-            options={tags}
-            onChange={handleSelectTags}
+            options={availableTags}
+            onChange={(newTags) => setTags(newTags)}
           />
         </div>
       )}
       <div id="keyword-filter">
         <label>Enter keywords</label>
-        <textarea onChange={handleSetKeywords} />
+        <textarea onChange={(e) => setKeywords(e.target.value)} />
       </div>
 
       <button disabled={isSearching} onClick={handleSearch}>

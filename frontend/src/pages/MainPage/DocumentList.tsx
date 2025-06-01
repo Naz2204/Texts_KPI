@@ -1,11 +1,9 @@
 import { Link } from 'react-router';
-import type { IDocument } from '../../queries/store';
+import { useSearchStore } from '../../store/store';
 
-interface Params {
-  documents: IDocument[];
-}
+export default function DocumentList() {
+  const { searchResult: documents } = useSearchStore();
 
-export default function DocumentList({ documents }: Params) {
   return (
     <ul>
       {documents.map((doc) => (

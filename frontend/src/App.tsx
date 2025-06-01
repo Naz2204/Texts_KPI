@@ -2,8 +2,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router';
 import MainPage from './pages/MainPage/MainPage';
 import BaseLayout from './layouts/BaseLayout';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { getAnalyzedFileLoader, queryClient } from './queries/store';
 import ResultPage from './pages/ResultPage';
+import { getAnalyzedFileLoader } from './queries/loaders';
+import { queryClient } from './queries';
 
 const router = createBrowserRouter([
   {

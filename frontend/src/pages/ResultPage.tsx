@@ -1,5 +1,5 @@
 import { useLoaderData } from 'react-router';
-import { type IAnalyzedDocument } from '../queries/store';
+import type { IAnalyzedDocument } from '../queries/types';
 
 export default function ResultPage() {
   const document = useLoaderData<IAnalyzedDocument>();
