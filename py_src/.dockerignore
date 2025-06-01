@@ -1,6 +1,7 @@
-./Labs1_2/
-./training_data/manual/
-./training_data/report/
-./training_data/research/
+Labs1_2
+training_data/manual
+training_data/report
+training_data/research
 my_utils/Files_to_dataset.py
 my_utils.egg-info
+build
