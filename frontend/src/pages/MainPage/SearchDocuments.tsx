@@ -44,6 +44,7 @@ export default function SearchDocuments() {
         <div id="tag-filter">
           <label>Select tags</label>
           <Select
+            className=''
             defaultValue={tags}
             isMulti
             options={availableTags}
@@ -53,7 +54,7 @@ export default function SearchDocuments() {
       )}
       <div id="keyword-filter">
         <label>Enter keywords</label>
-        <textarea onChange={(e) => setKeywords(e.target.value)} />
+        <textarea rows={1} onChange={(e) => setKeywords(e.target.value)} />
       </div>
 
       <button disabled={isSearching} onClick={handleSearch}>
