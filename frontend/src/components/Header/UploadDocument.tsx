@@ -2,11 +2,14 @@ import { useRef, useState, type ChangeEventHandler } from 'react';
 import { allowedFileTypes } from '../../config/allowedFileTypes';
 import { useMutation } from '@tanstack/react-query';
 import { analyzeDocumentMutation } from '../../queries/store';
+import { useNavigate } from 'react-router';
 
 export default function UploadDocument() {
   const { mutateAsync: analyzeFile, isPending } = useMutation({
     mutationFn: analyzeDocumentMutation
   });
+
+  const navigate = useNavigate();
 
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -32,7 +35,8 @@ export default function UploadDocument() {
       numKeywords: +numKeywords
     });
 
-    console.log(res);
+    setFile(null);
+    navigate(`/${res}`);
   };
 
   return (
@@ -47,7 +51,7 @@ export default function UploadDocument() {
       <button disabled={isPending} onClick={handleSelectFile}>
         Upload document
       </button>
-      {file && (
+      {!!file && !isPending && (
         <div>
           <p>{file.name}</p>
           <label>How many keywords to extract?</label>
