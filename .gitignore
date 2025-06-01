@@ -3,3 +3,7 @@ node_modules
 dist
 .venv
 py_src/.env
+py_src/my_utils.egg-info
+py_src/build
+py_src/Labs1_2
+.idea

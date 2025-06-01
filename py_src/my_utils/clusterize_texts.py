@@ -1,3 +1,4 @@
+import json
 from .text_preparation import text_preparation
 import numpy as np
 import joblib
@@ -5,11 +6,13 @@ from pathlib import Path
 
 _model_file_path = Path(__file__).parent.parent / 'models' / 'clusterize_and_autotag.joblib'
 
-def cluster_documents_and_generate_tags_lda(documents: list[str], num_clusters: int = 5, num_tags_per_cluster: int = 4):
+def cluster_documents_and_generate_tags_lda(documents: list[dict], num_clusters: int = 6, num_tags_per_cluster: int = 4):
     from sklearn.feature_extraction.text import TfidfVectorizer
     from sklearn.decomposition import LatentDirichletAllocation as LDA
 
-    prepared_documents = [text_preparation(doc) for doc in documents]
+
+
+    prepared_documents = [text_preparation(doc["body"]) for doc in documents]
 
     # max_df та min_df допомагають відфільтрувати занадто часті/рідкісні слова
     tfidf_vectorizer = TfidfVectorizer(stop_words="english", max_df=0.95, min_df=2)
@@ -27,6 +30,9 @@ def cluster_documents_and_generate_tags_lda(documents: list[str], num_clusters: 
 
     doc_topic_distribution = lda_model.transform(tfidf_data)
     doc_clusters = np.argmax(doc_topic_distribution, axis=1).tolist()
+    doc_cluster_pair = []
+    for doc, cluster in zip (documents, doc_clusters):
+        doc_cluster_pair.append((doc["_id"], cluster))
 
     results_to_save = {
         "lda_model": lda_model,
@@ -35,13 +41,14 @@ def cluster_documents_and_generate_tags_lda(documents: list[str], num_clusters: 
         "num_clusters": num_clusters,
         "num_tags_per_cluster": num_tags_per_cluster
     }
+    print(cluster_tags)
     try:
         joblib.dump(results_to_save, _model_file_path)
         print(f"Trained clusterizer was successfully written to file clusterize_and_autotag.joblib")
     except Exception as e:
         print(f"Error while saving a clusterizer: {e}")
 
-    return cluster_tags, doc_clusters
+    return cluster_tags, doc_cluster_pair
 
 
 def assign_new_document_lda(text: str) -> tuple[int, list[str]]:
@@ -66,3 +73,16 @@ def assign_new_document_lda(text: str) -> tuple[int, list[str]]:
 
     return int(predicted_cluster), assigned_tags
 
+
+if __name__ == '__main__':
+    training_data_file_path = Path(__file__).parent.parent / 'training_data' / 'extracted_data.json'
+
+    try:
+        with open(training_data_file_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception as e:
+        print(f"Unable to train model: {e}")
+        exit(-1)
+
+    texts = data["texts"]
+    cluster_documents_and_generate_tags_lda(texts)

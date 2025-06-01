@@ -28,10 +28,14 @@ class Document(BaseModel):
     body: str
     topics: list = []
     metadata: dict = {}
-    cluster_id: int
+    cluster_id: int = None
+    document_class: str = Field(alias="class")
     createdAt: datetime
     updatedAt: datetime
     version: int = Field(default=0, alias="__v")
+
+    class Config:
+        populate_by_name = True
 
 class Cluster(BaseModel):
     cluster_id: int
@@ -46,19 +50,7 @@ class Tag(BaseModel):
     updatedAt: datetime
     version: int = Field(default=0, alias="__v")
 
-#TODO прибрати після обговорення
-class Topic(BaseModel):
-    name: str
-    isRoot: bool = True
-    parent: MyObjectId = None
-    createdAt: datetime
-    updatedAt: datetime
-    version: int = Field(default=0, alias="__v")
-
-    @model_validator(mode="after")
-    def parent_must_exist(self):
-        if  (self.isRoot and self.parent is not None) or \
-            (not self.isRoot and self.parent is None):
-            raise ValueError("parent field can't be " + str(self.parent) + " when isRoot is " + str(self.isRoot))
-        else:
-            return self
+class RequestBody(BaseModel):
+    keywords: str|None = None
+    tags: list[str]|None = None
+    doc_class: str|None = None
