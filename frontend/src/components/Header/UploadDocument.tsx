@@ -1,7 +1,7 @@
 import { useRef, useState, type ChangeEventHandler } from 'react';
 import { allowedFileTypes } from '../../config/allowedFileTypes';
 import { useMutation } from '@tanstack/react-query';
-import { analyzeDocumentMutation } from '../../queries/store';
+import { analyzeDocumentMutation } from '../../queries/queries';
 import { useNavigate } from 'react-router';
 
 export default function UploadDocument() {
