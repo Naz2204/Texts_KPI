@@ -1,3 +1,3 @@
 export default function App() {
-  return <div>Niggers</div>;
+  return <div>nigg</div>;
 }
