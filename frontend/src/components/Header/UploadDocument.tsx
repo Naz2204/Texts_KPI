@@ -49,7 +49,8 @@ export default function UploadDocument() {
         accept={allowedFileTypes}
       />
       <button disabled={isPending} onClick={handleSelectFile}>
-        Upload document
+        {(!!file && !isPending) ? "Change document": "Upload document"}
+        
       </button>
       {!!file && !isPending && (
         <div id='text-param'>
