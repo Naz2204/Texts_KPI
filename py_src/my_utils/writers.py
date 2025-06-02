@@ -16,7 +16,7 @@ def write_file(filename: str, text: str) -> StreamingResponse:
         case ".pdf":
             response = write_pdf(filename, text)
         case ".txt":
-            response = write_pdf(filename, text)
+            response = write_txt(filename, text)
         case _:
             raise HTTPException(status_code=415, detail="Unsupported file type")
 

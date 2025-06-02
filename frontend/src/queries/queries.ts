@@ -46,26 +46,34 @@ export const getTagsQuery = async () => {
 
 export const downloadFileMutation = async (id: string) => {
   try {
-    const response = await axios.post(
-      `${baseUrl}/download/${id}`
-      //   {
-      //   responseType: 'blob'
-      // }
-    );
-    console.log(response.headers);
+    const response = await fetch(`${baseUrl}/download/${id}`, {
+      method: 'POST'
+    });
 
-    const format = response.headers['content-type'].split('/')[1];
-    console.log(format);
+    if (!response.ok) throw new Error('Failed to download file');
 
-    const filename = `file.${format}`;
+    const blob = await response.blob();
 
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', filename);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Extract filename from content-disposition header
+    const disposition = response.headers.get('Content-Disposition');
+    let filename = 'downloaded_file.docx';
+
+    if (disposition) {
+      const match = disposition.match(/filename\*?=['"]?UTF-8''([^;'" ]+)/);
+      if (match && match[1]) {
+        filename = decodeURIComponent(match[1]);
+      }
+    }
+
+    // Create a temporary link and trigger the download
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
     window.URL.revokeObjectURL(url);
   } catch (error) {
     console.error('Download failed:', error);
