@@ -40,7 +40,7 @@ export default function UploadDocument() {
   };
 
   return (
-    <div>
+    <div id='upload-file'>
       <input
         type="file"
         hidden
@@ -52,10 +52,12 @@ export default function UploadDocument() {
         Upload document
       </button>
       {!!file && !isPending && (
-        <div>
+        <div id='text-param'>
           <p>{file.name}</p>
-          <label>How many keywords to extract?</label>
-          <input type="number" defaultValue={4} ref={keywordsAmountInputRef} />
+          <div id='keyword-number'>
+            <label>How many keywords to extract?</label>
+            <input type="number" defaultValue={4} ref={keywordsAmountInputRef} />
+          </div>
           <button onClick={handleAnalyzeFile}>Analyze document</button>
         </div>
       )}
